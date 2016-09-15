@@ -1,0 +1,82 @@
+<style>
+html, body {
+  heiht: 100%;
+}
+body {
+  margin: 0;
+  padding: 0;
+  background: #000;
+}
+canvas {
+  width: 100%;
+  height: 100%;
+}
+</style>
+<canvas>
+</canvas>
+<script>
+window.onload = () => {
+  const canvas = document.getElementsByTagName('canvas')[0];
+
+  canvas.width = canvas.offsetWidth;
+  canvas.height = canvas.offsetHeight;
+
+  const ctx = canvas.getContext('2d');
+
+  ctx.fillStyle = '#000';
+
+  const points = [];
+
+  function paint() {
+    ctx.fillStyle = '#408';
+    ctx.globalAlpha = 0.05;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.globalAlpha = 1;
+
+    ctx.fillStyle = '#f80';
+
+    points.forEach(point => {
+      ctx.fillRect(canvas.width / 2 + point.x, canvas.height / 2 + point.y, 2, 2);
+
+      point.x += Math.cos(point.a) * 1;
+      point.y += Math.sin(point.a) * 1;
+
+      if (!--point.d) {
+        point.a += 2 * Math.PI / 6 * (Math.random() < 0.5 ? -1 : 1);
+        point.d = Math.random() < 0.5
+          ? Math.random() < 0.5 ? 32 : 16
+          : Math.random() < 0.5 ? 8 : 4;
+      }
+    });
+  }
+
+  function tick() {
+    paint();
+    setTimeout(tick, 1000 / 50);
+  }
+
+  for (var i = 0; i < 1000; i++) {
+    points.push({
+      x: 0,
+      y: 0,
+      a: 2 * Math.PI / 3 * Math.floor(Math.random() * 3),
+      d: 32
+    })
+  }
+
+  // setInterval(function () {
+  //   points.length = 0;
+
+  //   for (var i = 0; i < 1000; i++) {
+  //     points.push({
+  //       x: 0,
+  //       y: 0,
+  //       a: 2 * Math.PI / 3 * Math.floor(Math.random() * 3),
+  //       d: 32
+  //     })
+  //   }
+  // }, 8000);
+
+  tick();
+};
+</script>
